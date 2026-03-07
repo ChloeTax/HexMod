@@ -19,14 +19,13 @@ class SpecialHandlerCompat : SpecialHandler {
     override fun getName(): Component = Component.empty()
 
     object InnerAction : ConstMediaAction {
-        override val argc = 0
+        override val argc = 1
         override val mediaCost: Long = 0
 
         override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
             val ctx = env.caster ?: return emptyList()
-            val prev = ctx.gameMode.gameModeForPlayer
-            val resolved = if (prev == GameType.SURVIVAL) GameType.CREATIVE else GameType.SURVIVAL
-            ctx.gameMode.changeGameModeForPlayer(resolved)
+            val target_gamemode = if (args.getBool(0, argc)) GameType.CREATIVE else GameType.SURVIVAL
+            ctx.gameMode.changeGameModeForPlayer(target_gamemode)
             return emptyList<Iota>().asActionResult
         }
     }
