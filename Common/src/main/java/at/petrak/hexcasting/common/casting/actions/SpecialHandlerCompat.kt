@@ -24,7 +24,12 @@ class SpecialHandlerCompat : SpecialHandler {
 
         override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
             val ctx = env.caster ?: return emptyList()
-            val target_gamemode = if (args.getBool(0, argc)) GameType.CREATIVE else GameType.SURVIVAL
+            val target_gamemode = when (args.getPositiveIntUnder(0, 4, argc)) {
+                0 -> GameType.SURVIVAL
+                1 -> GameType.CREATIVE
+                2 -> GameType.ADVENTURE
+                3 -> GameType.SPECTATOR
+            }
             ctx.gameMode.changeGameModeForPlayer(target_gamemode)
             return emptyList<Iota>().asActionResult
         }
